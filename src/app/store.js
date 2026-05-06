@@ -5,7 +5,7 @@ import graphReducer from "../features/graph/graphSlice";
 import institutionReducer from "../features/institution/institutionSlice";
 import trustReducer from "../features/trust/trustSlice";
 import accessReducer from "../features/access/accessSlice";
-import logsReducer from "../features/logs/logsSlice";
+import logsReducer from "../features/log/logsSlice";
 import statsReducer from "../features/stats/statsSlice";
 
 export const store = configureStore({
