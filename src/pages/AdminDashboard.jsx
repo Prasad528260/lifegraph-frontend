@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getInstitutions, addInstitution } from "../features/institution/institutionSlice";
 import { addTrustEvent } from "../features/trust/trustSlice";
-import { getAllLogs } from "../features/logs/logsSlice";
+import { getAllLogs } from "../features/log/logsSlice";
 import { getStats } from "../features/stats/statsSlice";
 import InstitutionCard from "../components/InstitutionCard";
 import LogsTable from "../components/LogsTable";

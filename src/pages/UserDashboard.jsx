@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCapsule } from "../features/capsule/capsuleSlice";
 import { getGraph } from "../features/graph/graphSlice";
-import { getUserLogs } from "../features/logs/logsSlice";
+import { getUserLogs } from "../features/log/logsSlice";
 import useAuth from "../hooks/useAuth";
 import useGraph from "../hooks/useGraph";
 import CapsuleForm from "../components/CapsuleForm";

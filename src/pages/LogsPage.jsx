@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllLogs, getUserLogs } from "../features/logs/logsSlice";
+import { getAllLogs, getUserLogs } from "../features/log/logsSlice";
 import useAuth from "../hooks/useAuth";
 import useAdmin from "../hooks/useAdmin";
 import LogsTable from "../components/LogsTable";
