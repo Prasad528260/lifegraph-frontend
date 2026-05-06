@@ -215,9 +215,9 @@ const GraphView = ({ nodes, edges }) => {
 
   if (!nodes || nodes.length === 0) {
     return (
-      <div className="flex items-center justify-center h-48 bg-gray-50 rounded border border-dashed border-gray-300">
-        <p className="text-gray-400 text-sm">
-          No graph data yet. Fill your capsule to generate graph.
+      <div className="flex items-center justify-center h-48 bg-transparent">
+        <p className="text-neutral-500 text-sm font-medium">
+          No graph data yet.
         </p>
       </div>
     );
@@ -225,8 +225,7 @@ const GraphView = ({ nodes, edges }) => {
 
   return (
     <div
-      className="w-full rounded border border-gray-200 bg-white"
-      style={{ height: "600px" }}
+      className="w-full h-full min-h-[500px] bg-transparent"
     >
       <ReactFlow
         nodes={flowNodes}

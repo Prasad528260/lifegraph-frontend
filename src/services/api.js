@@ -33,7 +33,7 @@ export const requestAccessAPI = (data) => api.post("/access/request", data);
 
 // ── LOGS ──
 export const getAllLogsAPI = () => api.get("/logs");
-export const getUserLogsAPI = (userId) => api.get(`/logs/user/${userId}`);
+export const getUserLogsAPI = (userId) => api.get(`/logs/user`);
 export const getInstitutionLogsAPI = (id) => api.get(`/logs/institution/${id}`);
 
 

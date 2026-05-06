@@ -18,6 +18,7 @@ export const updateCapsule = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const res = await updateCapsuleAPI(data);
+      console.log("capsule res",res);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || "Failed to update capsule");

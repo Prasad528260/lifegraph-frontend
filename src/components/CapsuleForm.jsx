@@ -72,7 +72,6 @@ const CapsuleForm = ({ existing, loading }) => {
     }
   }, [existing]);
 
-  // for flat fields like identity, finance, health
   const handleChange = (domain, field, value) => {
     setForm((prev) => ({
       ...prev,
@@ -80,7 +79,6 @@ const CapsuleForm = ({ existing, loading }) => {
     }));
   };
 
-  // for nested education fields like ssc, hsc, graduation
   const handleEducationChange = (level, field, value) => {
     setForm((prev) => ({
       ...prev,
@@ -121,18 +119,36 @@ const CapsuleForm = ({ existing, loading }) => {
 
   const tabs = ["identity", "education", "finance", "health"];
 
-  return (
+  const InputField = ({ label, type = "text", value, onChange, placeholder, max, step }) => (
     <div>
+      <label className="block text-[11px] font-semibold text-neutral-400 mb-1.5 uppercase tracking-wider">
+        {label}
+      </label>
+      <input
+        type={type}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        max={max}
+        step={step}
+        className="w-full bg-neutral-900/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-neutral-600 focus:outline-none focus:ring-1 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all"
+      />
+    </div>
+  );
+
+  return (
+    <div className="flex flex-col h-full">
       {/* tabs */}
-      <div className="flex gap-2 mb-6 border-b border-gray-200">
+      <div className="flex gap-1 mb-6 bg-black/40 p-1 rounded-xl border border-white/5 overflow-x-auto no-scrollbar">
         {tabs.map((tab) => (
           <button
             key={tab}
+            type="button"
             onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 text-sm font-medium capitalize border-b-2 transition ${
+            className={`px-3 py-1.5 text-xs font-semibold uppercase tracking-wider rounded-lg transition-all whitespace-nowrap flex-1 ${
               activeTab === tab
-                ? "border-indigo-600 text-indigo-600"
-                : "border-transparent text-gray-500 hover:text-gray-700"
+                ? "bg-white/10 text-white shadow-sm"
+                : "text-neutral-500 hover:text-neutral-300 hover:bg-white/5"
             }`}
           >
             {tab}
@@ -140,353 +156,133 @@ const CapsuleForm = ({ existing, loading }) => {
         ))}
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6 flex-1 flex flex-col">
+        
+        <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-6">
+          {/* identity tab */}
+          {activeTab === "identity" && (
+            <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+              <InputField label="Full Name" value={form.identity.name} onChange={(e) => handleChange("identity", "name", e.target.value)} />
+              <InputField label="Date of Birth" type="date" value={form.identity.dob} onChange={(e) => handleChange("identity", "dob", e.target.value)} />
+              <InputField label="PAN Number" value={form.identity.pan} onChange={(e) => handleChange("identity", "pan", e.target.value)} />
+              <InputField label="Nationality" value={form.identity.nationality} onChange={(e) => handleChange("identity", "nationality", e.target.value)} />
+            </div>
+          )}
 
-        {/* identity tab */}
-        {activeTab === "identity" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">Full Name</label>
-              <input
-                type="text"
-                value={form.identity.name}
-                onChange={(e) => handleChange("identity", "name", e.target.value)}
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">Date of Birth</label>
-              <input
-                type="date"
-                value={form.identity.dob}
-                onChange={(e) => handleChange("identity", "dob", e.target.value)}
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">PAN Number</label>
-              <input
-                type="text"
-                value={form.identity.pan}
-                onChange={(e) => handleChange("identity", "pan", e.target.value)}
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">Nationality</label>
-              <input
-                type="text"
-                value={form.identity.nationality}
-                onChange={(e) => handleChange("identity", "nationality", e.target.value)}
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
-            </div>
-          </div>
-        )}
-
-        {/* education tab */}
-        {activeTab === "education" && (
-          <div className="space-y-8">
-
-            {/* SSC */}
-            <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-3 pb-1 border-b">
-                SSC (10th)
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">School</label>
-                  <input
-                    type="text"
-                    value={form.education.ssc.school}
-                    onChange={(e) => handleEducationChange("ssc", "school", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">Percentage</label>
-                  <input
-                    type="number"
-                    value={form.education.ssc.percentage}
-                    onChange={(e) => handleEducationChange("ssc", "percentage", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    max="100"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">Year</label>
-                  <input
-                    type="number"
-                    value={form.education.ssc.year}
-                    onChange={(e) => handleEducationChange("ssc", "year", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="2018"
-                  />
+          {/* education tab */}
+          {activeTab === "education" && (
+            <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
+              
+              <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                <h3 className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span> SSC (10th)
+                </h3>
+                <div className="space-y-3">
+                  <InputField label="School" value={form.education.ssc.school} onChange={(e) => handleEducationChange("ssc", "school", e.target.value)} />
+                  <div className="grid grid-cols-2 gap-3">
+                    <InputField label="Percentage" type="number" max="100" value={form.education.ssc.percentage} onChange={(e) => handleEducationChange("ssc", "percentage", e.target.value)} />
+                    <InputField label="Year" type="number" placeholder="2018" value={form.education.ssc.year} onChange={(e) => handleEducationChange("ssc", "year", e.target.value)} />
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* HSC */}
-            <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-3 pb-1 border-b">
-                HSC (12th)
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">School</label>
-                  <input
-                    type="text"
-                    value={form.education.hsc.school}
-                    onChange={(e) => handleEducationChange("hsc", "school", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">Stream</label>
-                  <input
-                    type="text"
-                    value={form.education.hsc.stream}
-                    onChange={(e) => handleEducationChange("hsc", "stream", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="Science, Commerce, Arts"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">Percentage</label>
-                  <input
-                    type="number"
-                    value={form.education.hsc.percentage}
-                    onChange={(e) => handleEducationChange("hsc", "percentage", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    max="100"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">Year</label>
-                  <input
-                    type="number"
-                    value={form.education.hsc.year}
-                    onChange={(e) => handleEducationChange("hsc", "year", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="2020"
-                  />
+              <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                <h3 className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span> HSC (12th)
+                </h3>
+                <div className="space-y-3">
+                  <InputField label="School" value={form.education.hsc.school} onChange={(e) => handleEducationChange("hsc", "school", e.target.value)} />
+                  <InputField label="Stream" placeholder="Science, Commerce, Arts" value={form.education.hsc.stream} onChange={(e) => handleEducationChange("hsc", "stream", e.target.value)} />
+                  <div className="grid grid-cols-2 gap-3">
+                    <InputField label="Percentage" type="number" max="100" value={form.education.hsc.percentage} onChange={(e) => handleEducationChange("hsc", "percentage", e.target.value)} />
+                    <InputField label="Year" type="number" placeholder="2020" value={form.education.hsc.year} onChange={(e) => handleEducationChange("hsc", "year", e.target.value)} />
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Graduation */}
-            <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-3 pb-1 border-b">
-                Graduation
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">Degree</label>
-                  <input
-                    type="text"
-                    value={form.education.graduation.degree}
-                    onChange={(e) => handleEducationChange("graduation", "degree", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="B.Tech, MBBS, B.Com"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">College</label>
-                  <input
-                    type="text"
-                    value={form.education.graduation.college}
-                    onChange={(e) => handleEducationChange("graduation", "college", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">GPA</label>
-                  <input
-                    type="number"
-                    value={form.education.graduation.gpa}
-                    onChange={(e) => handleEducationChange("graduation", "gpa", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    step="0.1"
-                    max="10"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">Year of Passing</label>
-                  <input
-                    type="number"
-                    value={form.education.graduation.year_of_passing}
-                    onChange={(e) => handleEducationChange("graduation", "year_of_passing", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="2023"
-                  />
+              <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                <h3 className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span> Graduation
+                </h3>
+                <div className="space-y-3">
+                  <InputField label="Degree" placeholder="B.Tech, MBBS, B.Com" value={form.education.graduation.degree} onChange={(e) => handleEducationChange("graduation", "degree", e.target.value)} />
+                  <InputField label="College" value={form.education.graduation.college} onChange={(e) => handleEducationChange("graduation", "college", e.target.value)} />
+                  <div className="grid grid-cols-2 gap-3">
+                    <InputField label="GPA" type="number" step="0.1" max="10" value={form.education.graduation.gpa} onChange={(e) => handleEducationChange("graduation", "gpa", e.target.value)} />
+                    <InputField label="Passing Year" type="number" placeholder="2023" value={form.education.graduation.year_of_passing} onChange={(e) => handleEducationChange("graduation", "year_of_passing", e.target.value)} />
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Post Graduation */}
-            <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-3 pb-1 border-b">
-                Post Graduation
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">Degree</label>
-                  <input
-                    type="text"
-                    value={form.education.postGraduation.degree}
-                    onChange={(e) => handleEducationChange("postGraduation", "degree", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="M.Tech, MBA, M.Sc"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">College</label>
-                  <input
-                    type="text"
-                    value={form.education.postGraduation.college}
-                    onChange={(e) => handleEducationChange("postGraduation", "college", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">GPA</label>
-                  <input
-                    type="number"
-                    value={form.education.postGraduation.gpa}
-                    onChange={(e) => handleEducationChange("postGraduation", "gpa", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    step="0.1"
-                    max="10"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">Year of Passing</label>
-                  <input
-                    type="number"
-                    value={form.education.postGraduation.year_of_passing}
-                    onChange={(e) => handleEducationChange("postGraduation", "year_of_passing", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="2025"
-                  />
+              <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                <h3 className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span> Post Graduation
+                </h3>
+                <div className="space-y-3">
+                  <InputField label="Degree" placeholder="M.Tech, MBA" value={form.education.postGraduation.degree} onChange={(e) => handleEducationChange("postGraduation", "degree", e.target.value)} />
+                  <InputField label="College" value={form.education.postGraduation.college} onChange={(e) => handleEducationChange("postGraduation", "college", e.target.value)} />
+                  <div className="grid grid-cols-2 gap-3">
+                    <InputField label="GPA" type="number" step="0.1" max="10" value={form.education.postGraduation.gpa} onChange={(e) => handleEducationChange("postGraduation", "gpa", e.target.value)} />
+                    <InputField label="Passing Year" type="number" placeholder="2025" value={form.education.postGraduation.year_of_passing} onChange={(e) => handleEducationChange("postGraduation", "year_of_passing", e.target.value)} />
+                  </div>
                 </div>
               </div>
-            </div>
 
-          </div>
-        )}
+            </div>
+          )}
 
-        {/* finance tab */}
-        {activeTab === "finance" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">Annual Income</label>
-              <input
-                type="number"
-                value={form.finance.income}
-                onChange={(e) => handleChange("finance", "income", e.target.value)}
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
+          {/* finance tab */}
+          {activeTab === "finance" && (
+            <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+              <InputField label="Annual Income" type="number" value={form.finance.income} onChange={(e) => handleChange("finance", "income", e.target.value)} />
+              <InputField label="Credit Score" type="number" max="900" value={form.finance.credit_score} onChange={(e) => handleChange("finance", "credit_score", e.target.value)} />
+              <InputField label="Primary Bank" value={form.finance.bank} onChange={(e) => handleChange("finance", "bank", e.target.value)} />
+              <InputField label="Loans (Comma separated)" placeholder="Home loan, Auto loan" value={form.finance.loans} onChange={(e) => handleChange("finance", "loans", e.target.value)} />
+              <InputField label="Assets (Comma separated)" placeholder="House, Car, Stocks" value={form.finance.assets} onChange={(e) => handleChange("finance", "assets", e.target.value)} />
             </div>
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">Credit Score</label>
-              <input
-                type="number"
-                value={form.finance.credit_score}
-                onChange={(e) => handleChange("finance", "credit_score", e.target.value)}
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                max="900"
-              />
-            </div>
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">Bank</label>
-              <input
-                type="text"
-                value={form.finance.bank}
-                onChange={(e) => handleChange("finance", "bank", e.target.value)}
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">
-                Loans (comma separated)
-              </label>
-              <input
-                type="text"
-                value={form.finance.loans}
-                onChange={(e) => handleChange("finance", "loans", e.target.value)}
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder="home loan, car loan"
-              />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm text-gray-600 mb-1">
-                Assets (comma separated)
-              </label>
-              <input
-                type="text"
-                value={form.finance.assets}
-                onChange={(e) => handleChange("finance", "assets", e.target.value)}
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder="house, car"
-              />
-            </div>
-          </div>
-        )}
+          )}
 
-        {/* health tab */}
-        {activeTab === "health" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">Blood Group</label>
-              <select
-                value={form.health.blood_group}
-                onChange={(e) => handleChange("health", "blood_group", e.target.value)}
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              >
-                <option value="">Select</option>
-                {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map((bg) => (
-                  <option key={bg} value={bg}>{bg}</option>
-                ))}
-              </select>
+          {/* health tab */}
+          {activeTab === "health" && (
+            <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+              <div>
+                <label className="block text-[11px] font-semibold text-neutral-400 mb-1.5 uppercase tracking-wider">Blood Group</label>
+                <select
+                  value={form.health.blood_group}
+                  onChange={(e) => handleChange("health", "blood_group", e.target.value)}
+                  className="w-full bg-neutral-900/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-indigo-500/50 focus:border-indigo-500/50 appearance-none"
+                >
+                  <option value="" className="bg-neutral-900">Select Type</option>
+                  {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map((bg) => (
+                    <option key={bg} value={bg} className="bg-neutral-900">{bg}</option>
+                  ))}
+                </select>
+              </div>
+              <InputField label="Insurance Provider" value={form.health.insurance} onChange={(e) => handleChange("health", "insurance", e.target.value)} />
+              <InputField label="Conditions (Comma separated)" placeholder="None, Asthma" value={form.health.conditions} onChange={(e) => handleChange("health", "conditions", e.target.value)} />
             </div>
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">Insurance</label>
-              <input
-                type="text"
-                value={form.health.insurance}
-                onChange={(e) => handleChange("health", "insurance", e.target.value)}
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm text-gray-600 mb-1">
-                Conditions (comma separated)
-              </label>
-              <input
-                type="text"
-                value={form.health.conditions}
-                onChange={(e) => handleChange("health", "conditions", e.target.value)}
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder="diabetes, hypertension or none"
-              />
-            </div>
-          </div>
-        )}
+          )}
+        </div>
 
-        {/* success message */}
-        {success && (
-          <div className="bg-green-50 text-green-600 px-4 py-2 rounded text-sm">
-            Capsule updated and graph regenerated successfully!
-          </div>
-        )}
+        {/* Action Area */}
+        <div className="pt-4 border-t border-white/10 mt-auto">
+          {success && (
+            <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-3 py-2.5 rounded-lg text-xs font-medium mb-4 flex items-center justify-center gap-2 animate-in fade-in slide-in-from-bottom-2">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+              Capsule Sync Successful
+            </div>
+          )}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700 disabled:opacity-50"
-        >
-          {loading ? "Saving..." : "Save Capsule"}
-        </button>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-white/10 border border-white/10 hover:bg-white/15 text-white font-medium py-2.5 rounded-lg disabled:opacity-50 transition-all flex items-center justify-center gap-2 text-sm"
+          >
+            {loading ? (
+              <><svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Synchronizing...</>
+            ) : "Save & Synchronize"}
+          </button>
+        </div>
 
       </form>
     </div>
