@@ -64,7 +64,36 @@ const Login = () => {
               {error}
             </div>
           )}
-
+{/* demo credentials */}
+<div className="mb-6 p-4 rounded-xl border border-indigo-500/20 bg-indigo-500/5">
+  <p className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-3">
+    Demo Credentials
+  </p>
+  <div className="space-y-2">
+    {[
+      { role: "User", email: "demo@user.com", password: "Demo@1234" },
+      { role: "Admin", email: "demo@admin.com", password: "Demo@1234" },
+      { role: "Superadmin", email: "demo@superadmin.com", password: "Demo@1234" },
+    ].map((cred) => (
+      <button
+        key={cred.role}
+        type="button"
+        onClick={() => setForm({ email: cred.email, password: cred.password })}
+        className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-all group"
+      >
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded">
+            {cred.role}
+          </span>
+          <span className="text-xs text-neutral-400 font-mono">{cred.email}</span>
+        </div>
+        <span className="text-[10px] text-neutral-600 group-hover:text-neutral-400 transition-colors">
+          Click to fill →
+        </span>
+      </button>
+    ))}
+  </div>
+</div>
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="block text-xs font-medium text-neutral-400 mb-1.5 uppercase tracking-wider">
