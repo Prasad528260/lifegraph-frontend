@@ -71,9 +71,8 @@ const Login = () => {
   </p>
   <div className="space-y-2">
     {[
-      { role: "User", email: "demo@user.com", password: "Demo@1234" },
-      { role: "Admin", email: "demo@admin.com", password: "Demo@1234" },
-      { role: "Superadmin", email: "demo@superadmin.com", password: "Demo@1234" },
+      { role: "User", email: "user@demo.com", password: "Password@123" },
+      { role: "Admin", email: "admin@demo.com", password: "Password@123" },
     ].map((cred) => (
       <button
         key={cred.role}
